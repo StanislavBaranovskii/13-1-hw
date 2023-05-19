@@ -1,4 +1,4 @@
-# Домашнее задание к занятию «`Уязвимости и атаки на информационные системы`» - `Станислав Барановский`
+# Домашнее задание к занятию 13.1. «`Уязвимости и атаки на информационные системы`» - `Станислав Барановский`
 
 ### Инструкция по выполнению домашнего задания
 
@@ -16,7 +16,6 @@
 Желаем успехов в выполнении домашнего задания.
 
 ------
----
 ## Задание 1
 
 Скачайте и установите виртуальную машину Metasploitable: https://sourceforge.net/projects/metasploitable/.
@@ -37,6 +36,35 @@
 - Какие уязвимости были вами обнаружены? (список со ссылками: достаточно трёх уязвимостей)
   
 *Приведите ответ в свободной форме.*  
+
+### Устанавлваем VMware Workstation Player (Ubuntu)
+```bash
+sudo apt update
+sudo apt install -y build-essential linux-headers-generic
+wget --user-agent="Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101 Firefox/60.0" https://www.vmware.com/go/getplayer-linux
+sudo chmod +x getplayer-linux
+sudo ./getplayer-linux --required --eulas-agreed
+
+```
+
+### Запускаем виртуальную машину metasploitable2
+Логин: msfadmin
+Пароль: msfadmin
+
+### Сканируем виртуальную машину (из нутри)
+```bash
+nmap -sXV localhost # инфомация по открытам TCP портам
+nmap -sUV localhost # инфомация по открытам UDP портам
+```
+
+*Список доступных сетевых TCP служб (столбец service): 
+![nmap -sXV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-1.png "nmap -sXV localhost")
+*Список доступных сетевых UDP служб (столбец service)): 
+![nmap -sUV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-2.png "nmap -sUV localhost")
+
+### Уязвимости
+- [OpenSSH < 7.7 - User Enumeration (2)](https://www.exploit-db.com/exploits/45939)
+- [PuTTY < 0.68 - 'ssh_agent_channel_data' Integer Overflow Heap Corruption](https://www.exploit-db.com/exploits/42137)
 
 ---
 ## Задание 2
