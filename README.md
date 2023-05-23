@@ -1,4 +1,4 @@
-# Домашнее задание к занятию 13.1. «`Уязвимости и атаки на информационные системы`» - `Станислав Барановский`
+# Домашнее задание к занятию 13.1 «`Уязвимости и атаки на информационные системы`» - `Станислав Барановский`
 
 ### Инструкция по выполнению домашнего задания
 
@@ -53,18 +53,26 @@ sudo ./getplayer-linux --required --eulas-agreed
 
 ### Сканируем виртуальную машину (из нутри)
 ```bash
-nmap -sXV localhost # инфомация по открытам TCP портам
-nmap -sUV localhost # инфомация по открытам UDP портам
+nmap -sSV localhost # инфомация по открытым TCP портам (TCP SYN)
+nmap -sTV localhost # инфомация по открытым TCP портам (TCP Connect)
+nmap -sAV localhost # инфомация по открытым TCP портам (TCP FIN)
+nmap -sUV localhost # инфомация по открытым UDP портам
+nmap -sV localhost # инфомация по всем открытым TCP портам
+nmap -A localhost # агресивный режим - инфомация по всем открытым TCP портам
 ```
 
 *Список доступных сетевых TCP служб (столбец service): 
-![nmap -sXV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-1.png "nmap -sXV localhost")
-*Список доступных сетевых UDP служб (столбец service)): 
+![nmap -sV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-1.png "nmap -sV localhost")
+*Список доступных сетевых UDP служб (столбец service): 
 ![nmap -sUV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-2.png "nmap -sUV localhost")
 
-### Уязвимости
-- [OpenSSH < 7.7 - User Enumeration (2)](https://www.exploit-db.com/exploits/45939)
-- [PuTTY < 0.68 - 'ssh_agent_channel_data' Integer Overflow Heap Corruption](https://www.exploit-db.com/exploits/42137)
+### Список нескольких уязвимостей
+- [vsftpd 2.3.4 - Backdoor Command Execution](https://www.exploit-db.com/exploits/49757)
+- [TelnetD encrypt_keyid - Function Pointer Overwrite](https://www.exploit-db.com/exploits/18280)
+- [ProFTPd IAC 1.3.x - Remote Command Execution](https://www.exploit-db.com/exploits/15449)
+- [MySQL 5.0.x - IF Query Handling Remote Denial of Service](https://www.exploit-db.com/exploits/30020)
+- [MySQL 5.0.x - Single Row SubSelect Remote Denial of Service](https://www.exploit-db.com/exploits/29724)
+
 
 ---
 ## Задание 2
