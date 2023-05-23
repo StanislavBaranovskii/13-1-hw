@@ -51,20 +51,20 @@ sudo ./getplayer-linux --required --eulas-agreed
 Логин: msfadmin
 Пароль: msfadmin
 
-### Сканируем виртуальную машину (из нутри)
+### Сканируем виртуальную машину
 ```bash
-nmap -sSV localhost # инфомация по открытым TCP портам (TCP SYN)
-nmap -sTV localhost # инфомация по открытым TCP портам (TCP Connect)
-nmap -sAV localhost # инфомация по открытым TCP портам (TCP FIN)
-nmap -sUV localhost # инфомация по открытым UDP портам
-nmap -sV localhost # инфомация по всем открытым TCP портам
-nmap -A localhost # агресивный режим - инфомация по всем открытым TCP портам
+nmap -sSV 172.16.52.128 # инфомация по открытым TCP портам (TCP SYN)
+nmap -sTV 172.16.52.128 # инфомация по открытым TCP портам (TCP Connect)
+nmap -sAV 172.16.52.128 # инфомация по открытым TCP портам (TCP FIN)
+nmap -sUV 172.16.52.128 # инфомация по открытым UDP портам
+nmap -sV 172.16.52.128 # инфомация по всем открытым TCP портам
+nmap -A 172.16.52.128 # агресивный режим - инфомация по всем открытым TCP портам
 ```
 
 *Список доступных сетевых TCP служб (столбец service): 
-![nmap -sV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-1.png "nmap -sV localhost")
+![nmap -sV 172.16.52.128](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-1.png "nmap -sV 172.16.52.128")
 *Список доступных сетевых UDP служб (столбец service): 
-![nmap -sUV localhost](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-2.png "nmap -sUV localhost")
+![nmap -sUV 172.16.52.128](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/img/13-1-1-2.png "nmap -sUV 172.16.52.128")
 
 ### Список нескольких уязвимостей
 - [vsftpd 2.3.4 - Backdoor Command Execution](https://www.exploit-db.com/exploits/49757)
@@ -81,6 +81,11 @@ nmap -A localhost # агресивный режим - инфомация по в
 
 Запишите сеансы сканирования в Wireshark.
 
+- [nmap-SYN.pcapng](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/capture/nmap-SYN.pcapng)
+- [nmap-FIN.pcapng](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/capture/nmap-FIN.pcapng)
+- [nmap-Xmas.pcapng](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/capture/nmap-Xmas.pcapng)
+- [nmap-UDP.pcapng](https://github.com/StanislavBaranovskii/13-1-hw/blob/main/capture/nmap-UDP.pcapng)
+
 Ответьте на следующие вопросы:
 
 - Чем отличаются эти режимы сканирования с точки зрения сетевого трафика?
@@ -88,4 +93,21 @@ nmap -A localhost # агресивный режим - инфомация по в
 
 *Приведите ответ в свободной форме.*
 
+### SYN сканирование
+
+Метод TCP SYN — наиболее популярен, используется в 95% случаев. Его называют сканированием с установкой полуоткрытого соединения, так как соединение не устанавливается до конца. На исследуемый порт посылается сообщение SYN, затем идет ожидание ответа, на основании которого определяется статус порта. Ответы SYN/ACK говорят о том, что порт прослушивается (открыт), а ответ RST говорит о том, что не прослушивается.
+
+Если после нескольких запросов не приходит никакого ответа, то сетевой трафик до порта узла назначения фильтруется средствами межсетевого экранирования (далее будем использовать термин «порт фильтруется»). Также порт помечается как фильтруемый, если в ответ приходит сообщение ICMP с ошибкой достижимости (Destination Unreachable) и определенными кодами и флагами.
+
+### FIN сканирование
+
+FIN scan — сканирование, которое основано на отправке пакетов, содержащих только один установленный флаг контроля соединения — FIN.
+
+### Xmas сканирование
+
+Xmas Scan — сканирование, которое основано на отправке пакетов, содержащих на каждый запрос разные флаги из всех доступных для контроля соединения.
+
+### UDP сканирование
+
+Сканирование медленное из-за специфики UDP и потери пакетов запросы повторяются несколько раз (обычно три и более). Если ответ не получен, статус порта определяется в состоянии «открыт» или «фильтруется», поскольку непонятно, что стало причиной — блокировка трафика средством защиты или потеря пакетов.
 ---
